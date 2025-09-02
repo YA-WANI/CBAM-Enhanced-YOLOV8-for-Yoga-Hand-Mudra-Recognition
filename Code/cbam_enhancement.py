@@ -6,7 +6,7 @@ from ultralytics.nn.modules import C2f, SPPF, Conv, SiLU, BatchNorm2d
 from ultralytics.nn.tasks import Detect, DetectionModel
 from torch.nn import Sequential, Conv2d
 
-# ✅ 3. Disable deterministic behavior
+# 3. Disable deterministic behavior
 torch.use_deterministic_algorithms(False)
 os.environ['CUBLAS_WORKSPACE_CONFIG'] = ':4096:8'
 os.environ['PYTHONHASHSEED'] = str(0)
@@ -14,7 +14,7 @@ torch.backends.cudnn.deterministic = False
 torch.backends.cudnn.benchmark = True
 
 
-# ✅ 5. Define CBAM module
+# 5. Define CBAM module
 class ChannelAttention(nn.Module):
     def __init__(self, in_planes, ratio=16):
         super().__init__()
@@ -57,7 +57,7 @@ class CBAM(nn.Module):
         x = x * self.sa(x)
         return x
 
-# ✅ 6. Patch torch.load to support custom CBAM layer
+# 6. Patch torch.load to support custom CBAM layer
 import torch.serialization
 torch.serialization.add_safe_globals([
     ultralytics.nn.tasks.DetectionModel,
@@ -71,7 +71,7 @@ torch.serialization.add_safe_globals([
     CBAM
 ])
 
-# ✅ 7. Register CBAM into Ultralytics
+# 7. Register CBAM into Ultralytics
 from ultralytics.nn import modules as ultralytics_modules
 ultralytics_modules.C2f = C2f
 ultralytics_modules.SPPF = SPPF
@@ -79,7 +79,7 @@ ultralytics_modules.Detect = Detect
 ultralytics_modules.CBAM = CBAM
 ultralytics.nn.tasks.__dict__['CBAM'] = CBAM
 
-# ✅ 8. Get width and depth multipliers per variant
+# 8. Get width and depth multipliers per variant
 def get_variant_hyperparams(variant):
     if variant == 'n': return 0.33, 0.25
     if variant == 's': return 0.33, 0.50
@@ -88,7 +88,7 @@ def get_variant_hyperparams(variant):
     if variant == 'x': return 1.00, 1.25
     raise ValueError("Invalid variant.")
 
-# ✅ 9. YAML builder
+# 9. YAML builder
 def get_dynamic_yaml(base_conv_channels_unscaled, variant='s'):
     dm, wm = get_variant_hyperparams(variant)
 
