@@ -1,1 +1,9 @@
-
+pip install ultralytics
+pip install yt-dlp
+pip install opencv-python
+pip install numpy
+pip install matplotlib
+pip install scikit-learn
+pip install pyyaml
+pip install wandb
+torch install torch
