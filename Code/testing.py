@@ -5,17 +5,17 @@ from pathlib import Path
 from ultralytics import YOLO
 import torch
 
-# ✅ Load trained model
+# Load trained model
 model = YOLO('/kaggle/working/runs/detect/train/weights/best.pt')
 class_names = model.names
 num_classes = len(class_names)
 
-# ✅ Paths
+# Paths
 test_images_dir = Path('/kaggle/working/datasets/test/images')
 test_labels_dir = Path('/kaggle/working/datasets/test/labels')
 image_paths = sorted(list(test_images_dir.glob("*.jpg")))
 
-# ✅ Helper to get true labels
+# Helper to get true labels
 def get_true_classes(label_path):
     if not label_path.exists():
         return []
@@ -23,7 +23,7 @@ def get_true_classes(label_path):
         lines = f.readlines()
     return sorted(list(set([int(line.strip().split()[0]) for line in lines])))
 
-# ✅ Get a randomized collection with 1 image per class (if available)
+# Get a randomized collection with 1 image per class (if available)
 def get_random_classwise_images():
     classwise_image_dict = {i: [] for i in range(num_classes)}
 
@@ -43,7 +43,7 @@ def get_random_classwise_images():
 
     return classwise_image_dict
 
-# ✅ Display a collection
+# Display a collection
 def display_collection(classwise_images, collection_index=1):
     fig, axes = plt.subplots(2, 5, figsize=(20, 8))
     fig.suptitle(f"🔍 Randomized Prediction Collection {collection_index}", fontsize=16)
@@ -65,7 +65,7 @@ def display_collection(classwise_images, collection_index=1):
         classes = result.boxes.cls.cpu().numpy().astype(int)
         confs = result.boxes.conf.cpu().numpy()
 
-        # ✅ Find the highest confidence prediction
+        # Find the highest confidence prediction
         if len(confs) > 0:
             top_idx = confs.argmax()
             top_label = class_names[classes[top_idx]]
@@ -74,7 +74,7 @@ def display_collection(classwise_images, collection_index=1):
         else:
             print(f"[{class_names[i]}] ➤ No predictions in image: {img_path.name}")
 
-        # ✅ Draw all predicted boxes
+        # Draw all predicted boxes
         for box, cls_id, conf in zip(boxes, classes, confs):
             x1, y1, x2, y2 = map(int, box)
             label = f"{class_names[cls_id]} {conf:.2f}"
@@ -91,7 +91,7 @@ def display_collection(classwise_images, collection_index=1):
     plt.savefig(f"visualize_collection_Yolov8customtrain_{collection_index}.png", dpi=300)
     plt.show()
 
-# ✅ Generate & display 3 randomized collections
+# Generate & display 3 randomized collections
 for i in range(1, 4):
     classwise_images = get_random_classwise_images()
     display_collection(classwise_images, i)
