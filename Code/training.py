@@ -4,7 +4,7 @@ import torch
 from ultralytics import YOLO
 from cbam_enhancement import get_dynamic_yaml
 
-# ✅ 10. Training Settings
+# 10. Training Settings
 base_channels = 64
 epochs = 20
 batch = 16
@@ -13,7 +13,7 @@ optimizer = "Adam"
 imgsz = 640
 variants = ['n']  # All variants
 
-# ✅ 11. Training Loop
+# 11. Training Loop
 if __name__ == '__main__':
     for v in variants:
         print(f"\n🔧 Preparing YOLOv8{v.upper()}...")
@@ -35,7 +35,7 @@ if __name__ == '__main__':
 
         print(f"🚀 Training YOLOv8{v.upper()} CBAM...")
         model_CBAM.train(
-            data="data.yaml",  # ✅ Ensure your data.yaml is in place
+            data="data.yaml",  # Ensure your data.yaml is in place
             epochs=epochs,
             imgsz=imgsz,
             optimizer=optimizer,
@@ -61,4 +61,4 @@ if __name__ == '__main__':
         )
 
         #wandb.finish()
-        print(f"✅ Finished training YOLOv8{v.upper()}.\n")
+        print(f"Finished training YOLOv8{v.upper()}.\n")
