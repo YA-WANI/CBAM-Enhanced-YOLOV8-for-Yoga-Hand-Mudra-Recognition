@@ -56,7 +56,7 @@ def prepare_data(source_dir, dataset_name='hand_gestures'):
     copy_files(test_images, base_dir / 'test')
 
     # Read class names from a provided file or default to a list
-    class_names = ['hello', 'stop', 'love', 'rock', 'ok']
+    class_names = ['Adi', 'Anjali', 'Apana, 'Gyan', 'Hakini','Adi', 'Prana', 'Prithvi, 'Surya', 'Varun']
 
     # Create the data.yaml file
     data_yaml = {
