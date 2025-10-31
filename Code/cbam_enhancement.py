@@ -117,20 +117,20 @@ width_multiple: {wm}
 backbone:
   [
     [-1, 1, Conv, [{c1_base}, 3, 2]],
-    [-1, 1, Conv, [{c2_base}, 3, 2]],  # No CBAM in early stage
+    [-1, 1, Conv, [{c2_base}, 3, 2]],  
     [-1, {n_c2f}, C2f, [{c2_base}, True]],
     [-1, 1, Conv, [{c3_base}, 3, 2]],
     [-1, {n_c2f}, C2f, [{c3_base}, True]],
-    [-1, 1, CBAM, [{actual_c3}]],      # CBAM in deeper layers only
+    [-1, 1, CBAM, [{actual_c3}]],      # After the second C2f block: helps refine low-level features early
     [-1, 1, Conv, [{c4_base}, 3, 2]],
     [-1, 1, SPPF, [{c4_base}, 5]],
-    [-1, 1, CBAM, [{actual_c4}]]       # CBAM after SPPF
+    [-1, 1, CBAM, [{actual_c4}]]       # After the SPPF layer: captures high-level, multi-scale context for better mudra recognition.
   ]
 
 head:
   [
     [-1, 1, Conv, [{c3_base}, 1, 1]],
-    [-1, 1, CBAM, [{actual_c3}]],
+    [-1, 1, CBAM, [{actual_c3}]],#Before the final Detect layer: sharpens feature maps right before prediction for better bounding boxes and classifications.
     [[[-1], 1, Detect, [nc]]]
   ]
 """
